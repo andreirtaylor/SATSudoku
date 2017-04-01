@@ -9,7 +9,7 @@ N = 9
 def display(puzzle, N):
     s = int(math.sqrt(N))
     squares = [s*(x+1) for x in range(s)]
-    
+
     for idx, line in enumerate(puzzle):
         if (idx in squares):
             print('------+-------+------')
@@ -18,13 +18,13 @@ def display(puzzle, N):
                 print('|'),
             print(num),
         print
-    
+
 def sat2sud(input):
     with open(input, 'r') as sat:
         variables = []
         next(sat)
 
-        ''' 
+        '''
         N*N*N propositional variables.
         for each entry in the NxN grid S, we associate N variables
         s_xyz is assigned true iff the entry in row x and col y is assigned number z
@@ -52,7 +52,7 @@ def sat2sud(input):
             v, num = divmod(v-1, N)
             v, col = divmod(v, N)
             v, row = divmod(v, N)
-            
+
             puzzle[row][col] = num + 1
 
         display(puzzle, N)
@@ -64,7 +64,7 @@ def main():
         print('sud2sat reads a Sudoku puzzle and converts it to CNF for miniSAT')
         print('  Input: input miniSAT file')
         sys.exit(-1)
-        
+
     else:
         sat2sud(sys.argv[1])
 
