@@ -11,14 +11,18 @@ python3 sat2sud <input_file> [output_file]
         place to write the output DIMACS formatted file
 """
 
+# convert given a row,col (start at index 0) and a sudoku value start at 1
+# convert the row, col and value into a unique base 9 number
+# i.e. base_convert(0,0,1, 9) = 1
+def base_convert(row,col,val, base):
+    return base**2 * (row) + base * (col) + (int(val) - 1) + 1
+
 # given a 0 indexed number from a base x base square return a unique representation of the
 # row column and value
-
 def ind_val_to_base(ind, val, base):
     i = ind / base
     j = ind % base
-    return base**2 * (i) + base * (j) + (int(val) - 1) + 1
-
+    return base_convert(i,j,val,base)
 
 ## given a valid sudoku file parse into a standard array of 81 character lines
 def parse_into_standard_format(in_file, puzzle_lengh):
