@@ -5,7 +5,44 @@ This project solves sudoku puzzles as a boolean satisfiability problem
 It outputs statistics from minisat as well as the solved sudoku puzzle
 
 ```
-output goes here
+WARNING: for repeatability, setting FPU to use double precision
+============================[ Problem Statistics ]=============================
+|                                                                             |
+WARNING! DIMACS header mismatch: wrong number of clauses.
+|  Number of variables:           729                                         |
+|  Number of clauses:            4007                                         |
+|  Parse time:                   0.00 s                                       |
+|  Eliminated clauses:           0.00 Mb                                      |
+|  Simplification time:          0.00 s                                       |
+|                                                                             |
+============================[ Search Statistics ]==============================
+| Conflicts |          ORIGINAL         |          LEARNT          | Progress |
+|           |    Vars  Clauses Literals |    Limit  Clauses Lit/Cl |          |
+===============================================================================
+===============================================================================
+restarts              : 1
+conflicts             : 11             (inf /sec)
+decisions             : 24             (0.00 % random) (inf /sec)
+propagations          : 832            (inf /sec)
+conflict literals     : 37             (0.00 % deleted)
+Memory used           : 22.00 MB
+CPU time              : 0 s
+
+SATISFIABLE
+3 5 1 | 2 8 6 | 4 9 7
+4 9 2 | 1 5 7 | 6 3 8
+7 8 6 | 9 3 4 | 5 1 2
+------+-------+-------
+2 7 5 | 4 6 9 | 1 8 3
+9 3 8 | 5 2 1 | 7 6 4
+6 1 4 | 8 7 3 | 2 5 9
+------+-------+-------
+8 2 9 | 6 4 5 | 3 7 1
+1 6 3 | 7 9 2 | 8 4 5
+5 4 7 | 3 1 8 | 9 2 6
+
+Solved in 0.0153799057007 seconds.
+
 ```
 
 ## Usage 
