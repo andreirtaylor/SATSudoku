@@ -57,6 +57,21 @@ def once_per_row_clause(size):
 def sub_grid_clause(size):
     ret = []
     subgrid = int(math.sqrt(size))
+
+    for k in range(1, size + 1):
+        for a in range(subgrid):
+            for b in range(subgrid):
+                for u in range(1, subgrid + 1):
+                    for v in range(1, subgrid):
+                        for w in range((v + 1), subgrid + 1):
+                            i  = 3*a + u
+                            j1 = 3*b + v
+                            j2 = 3*b + w
+                            num1 = -base_convert(i-1, j1-1, k, size)
+                            num2 = -base_convert(i-1, j2-1, k, size)
+                            row = str(num1) + " " + str(num2)
+                            ret.append(row)
+
     for k in range(1, size + 1):
         for a in range(subgrid):
             for b in range(subgrid):
