@@ -14,7 +14,7 @@ python3 sat2sud <input_file> [output_file]
 # convert given a row,col (start at index 0) and a sudoku value start at 1
 # convert the row, col and value into a unique base 9 number
 # i.e. base_convert(0,0,1, 9) = 1
-def base_convert(row,col,val, base):
+def base_convert(row, col, val, base):
     return int(base**2) * (row) + base * (col) + (int(val) - 1) + 1
 
 # given a 0 indexed number from a base x base square return a unique representation of the
@@ -51,7 +51,7 @@ def once_per_row_clause(size):
         for val in range(1, size + 1):
             for col1 in range(size):
                 for col2 in range(size):
-                    ret.append( "  ")
+                    ret.append(" ")
     return ret
 
 def sub_grid_clause(size):
@@ -72,7 +72,6 @@ def sub_grid_clause(size):
                                 num2 = -base_convert(i2-1, j2-1, k, size)
                                 row = str(num1) + " " + str(num2)
                                 ret.append(row)
-    print(ret)
     return ret
 
 
