@@ -120,7 +120,7 @@ def generate_clauses(size):
 def sat2sud(input_file):
     lines = []
     with open(input_file, 'r') as in_file:
-        ## get 81 character lines in a standard format from the file (assuming 9x9 puzzle for now)
+        ## get N*N character lines in a standard format from the file (assuming 9x9 puzzle for now)
         lines = parse_into_standard_format(in_file, N**2)
     ret = []
     for line in lines:
@@ -143,12 +143,14 @@ if __name__ == '__main__':
     sat += sat2sud(input_file)
     sat += clauses
 
-    output_file = "sat_out.txt"
+    output_file = "sudoku.cnf"
 
     if len(sys.argv) == 3:
         output_file = sys.argv[2]
 
     with open(output_file, 'w') as out_file:
+        out_file.write(sat[0])
+        sat = sat[1:]
         for line in sat:
             out_file.write(line + " 0\n")
 

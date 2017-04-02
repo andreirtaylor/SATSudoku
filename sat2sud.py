@@ -12,12 +12,12 @@ def display(puzzle, N):
 
     for idx, line in enumerate(puzzle):
         if (idx in squares):
-            print('------+-------+------')
+            print('---------+---------+--------')
         for jdx, num in enumerate(line):
             if (jdx in squares):
-                print('|'),
-            print(num),
-        print
+                print('|', end='')
+            print(' ' + str(num) + ' ', end='')
+        print(end='\n')
 
 def sat2sud(input):
     with open(input, 'r') as sat:
