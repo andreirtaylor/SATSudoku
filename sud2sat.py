@@ -43,15 +43,27 @@ def one_num_per_entry_clause(size):
         ret.append(" ".join(row))
     return ret
 
-# generates the clauses for one number per entry
 def once_per_row_clause(size):
+    ret = []
+    for col in range(size - 1):
+        # the values should be in the range of 1 -> 9
+        for val in range(1, size + 1):
+            for row1 in range(size):
+                for row2 in range(row1 +1, size):
+                    values = str(-base_convert(row1, col, val, size)) + " " + str(-base_convert(row2, col, val, size))
+                    ret.append(values)
+    return ret
+
+def once_per_column_clause(size):
     ret = []
     for row in range(size):
         # the values should be in the range of 1 -> 9
         for val in range(1, size + 1):
-            for col1 in range(size):
-                for col2 in range(size):
-                    ret.append(" ")
+            for col1 in range(size - 1):
+                for col2 in range(col1 +1, size):
+                    values = str(-base_convert(row, col1, val, size)) + " " + str(-base_convert(row, col2, val, size))
+                    ret.append(values)
+
     return ret
 
 def sub_grid_clause(size):
@@ -89,12 +101,12 @@ def sub_grid_clause(size):
                                 ret.append(row)
     return ret
 
-
-# Generates the list of rules for a size x size 
+# Generates the list of rules for a size x size
 def generate_clauses(size):
     one_number = one_num_per_entry_clause(size)
     rows = once_per_row_clause(size)
     sub_grid = sub_grid_clause(size)
+    cols = once_per_column_clause(size)
 
 ## returns a list of sat encoded values for each of the non zero inputs in the file
 def sat2sud(input_file):
