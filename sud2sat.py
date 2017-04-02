@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys, re, math
+import sys, re, math, os
 
 N = 9
 
@@ -38,7 +38,7 @@ def parse_into_standard_format(in_file, puzzle_lengh):
 # generates the clauses for one number per entry
 def one_num_per_entry_clause(size):
     ret = []
-    ret.append("c one number per entry")
+    #ret.append("c one number per entry")
     for i in range(int(size**2)):
         row = []
         for val in range(1, size + 1):
@@ -48,7 +48,7 @@ def one_num_per_entry_clause(size):
 
 def once_per_row_clause(size):
     ret = []
-    ret.append("c once per row")
+    #ret.append("c once per row")
     for col in range(size - 1):
         # the values should be in the range of 1 -> 9
         for val in range(1, size + 1):
@@ -60,7 +60,7 @@ def once_per_row_clause(size):
 
 def once_per_column_clause(size):
     ret = []
-    ret.append("c once per column")
+    #ret.append("c once per column")
     for row in range(size):
         # the values should be in the range of 1 -> 9
         for val in range(1, size + 1):
@@ -73,7 +73,7 @@ def once_per_column_clause(size):
 
 def sub_grid_clause(size):
     ret = []
-    ret.append("c sub_grid1")
+    #ret.append("c sub_grid1")
     subgrid = int(math.sqrt(size))
 
     for k in range(1, size + 1):
@@ -124,10 +124,29 @@ def sat2sud(input_file):
         lines = parse_into_standard_format(in_file, N**2)
     ret = []
     for line in lines:
+        tmp = []
         for i in range(len(line)):
             if line[i] != '0':
-                ret.append(str(ind_val_to_base(i, line[i], N)))
+                tmp.append(str(ind_val_to_base(i, line[i], N)))
+        ret.append(tmp)
     return ret
+
+def print_stats(sat_cases):
+    # create a temp file for output
+    output_file = "sudoku.cnf"
+
+    for case in sat_cases:
+
+        with open(output_file, 'w') as out_file:
+            out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses)+ len(case))) + '\n')
+            for line in case:
+                out_file.write(line + " 0\n")
+            for line in clauses:
+                out_file.write(line + " 0\n")
+        # write to a random temp file
+        os.system("minisat " +  output_file + "  " + "tmp")
+        os.system("./sat2sud.py tmp")
+
 
 if __name__ == '__main__':
     ## you must supply at least one argument
@@ -139,18 +158,7 @@ if __name__ == '__main__':
 
     clauses = generate_clauses(N)
 
-    sat = [('p cnf ' + str(N**3) + ' ' + str(len(clauses)) + '\n')]
-    sat += sat2sud(input_file)
-    sat += clauses
+    sat_cases = sat2sud(input_file)
 
-    output_file = "sudoku.cnf"
-
-    if len(sys.argv) == 3:
-        output_file = sys.argv[2]
-
-    with open(output_file, 'w') as out_file:
-        out_file.write(sat[0])
-        sat = sat[1:]
-        for line in sat:
-            out_file.write(line + " 0\n")
+    print_stats(sat_cases)
 
