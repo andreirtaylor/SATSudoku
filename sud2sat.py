@@ -89,7 +89,7 @@ def sub_grid_clause(size):
                             num2 = -base_convert(i-1, j2-1, k, size)
                             row = str(num1) + " " + str(num2)
                             ret.append(row)
-    ret.append("c sub_grid2")
+    #ret.append("c sub_grid2")
     for k in range(1, size + 1):
         for a in range(subgrid):
             for b in range(subgrid):
