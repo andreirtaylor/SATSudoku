@@ -11,6 +11,7 @@ output goes here
 ## Usage 
 
 - Install [minisat](http://minisat.se/MiniSat.html) 
+- Install [Python 2.7](https://www.python.org/download/releases/2.7/)
 - Clone the repository
 - Follow the desired instructions below
 
