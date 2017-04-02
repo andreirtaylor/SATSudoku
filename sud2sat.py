@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import sys, re, math
 
@@ -14,13 +14,13 @@ python3 sat2sud <input_file> [output_file]
 # convert given a row,col (start at index 0) and a sudoku value start at 1
 # convert the row, col and value into a unique base 9 number
 # i.e. base_convert(0,0,1, 9) = 1
-def base_convert(row, col, val, base):
-    return base**2 * (row) + base * (col) + (int(val) - 1) + 1
+def base_convert(row,col,val, base):
+    return int(base**2) * (row) + base * (col) + (int(val) - 1) + 1
 
 # given a 0 indexed number from a base x base square return a unique representation of the
 # row column and value
 def ind_val_to_base(ind, val, base):
-    i = ind / base
+    i = ind // base
     j = ind % base
     return base_convert(i,j,val,base)
 
@@ -36,12 +36,22 @@ def parse_into_standard_format(in_file, puzzle_lengh):
 # generates the clauses for one number per entry
 def one_num_per_entry_clause(size):
     ret = []
-    for i in range(size**2):
+    for i in range(int(size**2)):
         row = []
         for val in range(size + 1):
-            row.append(ind_val_to_base(i, val, size))
-        print(row)
-        ret.append(row)
+            row.append(str(ind_val_to_base(i, val, size)))
+        ret.append(" ".join(row))
+    return ret
+
+# generates the clauses for one number per entry
+def once_per_row_clause(size):
+    ret = []
+    for row in range(size):
+        # the values should be in the range of 1 -> 9
+        for val in range(1, size + 1):
+            for col1 in range(size):
+                for col2 in range(size):
+                    ret.append( "  ")
     return ret
 
 def sub_grid_clause(size):
@@ -69,6 +79,7 @@ def sub_grid_clause(size):
 # Generates the list of rules for a size x size 
 def generate_clauses(size):
     one_number = one_num_per_entry_clause(size)
+    rows = once_per_row_clause(size)
     sub_grid = sub_grid_clause(size)
 
 ## returns a list of sat encoded values for each of the non zero inputs in the file
