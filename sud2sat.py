@@ -131,20 +131,22 @@ def at_most_one_entry_subgrid_clause(size):
                         sj = 3*j + y
                         sz = z
                         num = base_convert(si-1, sj-1, z, size)
-                        row = str(num1)
+                        row = str(num)
                         ret.append(row)
     return ret
 
 # Generates the list of rules for a size x size
-def generate_clauses(size):
+def generate_clauses(size, ext):
     one_number = one_num_per_entry_clause(size)
     rows = once_per_row_clause(size)
     cols = once_per_column_clause(size)
     sub_grid = sub_grid_clause(size)
     most_one_entry = at_most_one_entry_clause(size)
     most_one_entry_subgrid = at_most_one_entry_subgrid_clause(size)
-
-    return one_number + cols + rows + sub_grid + most_one_entry + most_one_entry_subgrid
+    if ext:
+        return one_number + cols + rows + sub_grid + most_one_entry + most_one_entry_subgrid
+    else:
+        return one_number + cols + rows + sub_grid
 
 ## returns a list of sat encoded values for each of the non zero inputs in the file
 def sat2sud(input_file):
@@ -161,9 +163,9 @@ def sat2sud(input_file):
         ret.append(tmp)
     return ret
 
-def print_stats(sat_cases):
+def print_stats(sat_cases, ext):
     # create a temp file for output
-    clauses = generate_clauses(N)
+    clauses = generate_clauses(N, ext)
     output_file = "sudoku.cnf"
     results = "results.csv"
     times = []
@@ -204,6 +206,15 @@ if __name__ == '__main__':
 
     input_file = sys.argv[1]
 
+    ext = False;
+    if len(sys.argv) > 2:
+        extended = sys.argv[2]
+
+        if extended == "-e":
+            ext = True
+
     sat_cases = sat2sud(input_file)
 
-    print_stats(sat_cases)
+    print_stats(sat_cases, ext)
+
+

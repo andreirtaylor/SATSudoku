@@ -2,8 +2,8 @@
 
 import sys, os
 
-def main(filename):
-    os.system("./sud2sat.py " +  filename)
+def main(filename, ext=""):
+    os.system("./sud2sat.py " + filename + " " + ext)
 
     os.remove("tmp")
 
@@ -14,5 +14,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     input_file = sys.argv[1]
-
-    main(input_file)
+    
+    if len(sys.argv) < 3:
+        main(input_file)
+    else:
+        ext = sys.argv[2]
+        main(input_file, ext)
