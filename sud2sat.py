@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys, re, math, os
+import sys, re, math, os, time, subprocess
 
 N = 9
 
@@ -133,19 +133,35 @@ def sat2sud(input_file):
 
 def print_stats(sat_cases):
     # create a temp file for output
+
     output_file = "sudoku.cnf"
+    results = "results.csv"
+    times = []
+    with open(results, 'w') as res:
+        for idx, case in enumerate(sat_cases):
 
-    for case in sat_cases:
+            startTime = time.time()
+            
+            with open(output_file, 'w') as out_file:
+                out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses)+ len(case))) + '\n')
+                for line in case:
+                    out_file.write(line + " 0\n")
+                for line in clauses:
+                    out_file.write(line + " 0\n")
+            
+            # write to a random temp file
+            os.system("minisat " +  output_file + "  " + "tmp")
 
-        with open(output_file, 'w') as out_file:
-            out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses)+ len(case))) + '\n')
-            for line in case:
-                out_file.write(line + " 0\n")
-            for line in clauses:
-                out_file.write(line + " 0\n")
-        # write to a random temp file
-        os.system("minisat " +  output_file + "  " + "tmp")
-        os.system("./sat2sud.py tmp")
+            proc = subprocess.Popen("./sat2sud.py tmp", stdout=subprocess.PIPE, shell=True)
+            (out, err) = proc.communicate()
+            
+            out = re.sub('[-+|\\n ]', '', out)
+
+            t = time.time() - startTime
+            times.append(t)
+            res.write(str(idx) + "," + str(t) + "," + out + "\n")
+
+        res.write(str(reduce(lambda x, y: x + y, times) / len(times)))
 
 
 if __name__ == '__main__':
