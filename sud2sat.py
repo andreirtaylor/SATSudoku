@@ -133,7 +133,7 @@ def sat2sud(input_file):
 
 def print_stats(sat_cases):
     # create a temp file for output
-
+    clauses = generate_clauses(N)
     output_file = "sudoku.cnf"
     results = "results.csv"
     times = []
@@ -143,7 +143,7 @@ def print_stats(sat_cases):
             startTime = time.time()
             
             with open(output_file, 'w') as out_file:
-                out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses)+ len(case))) + '\n')
+                out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses) + len(case))) + '\n')
                 for line in case:
                     out_file.write(line + " 0\n")
                 for line in clauses:
@@ -163,7 +163,6 @@ def print_stats(sat_cases):
 
         res.write(str(reduce(lambda x, y: x + y, times) / len(times)))
 
-
 if __name__ == '__main__':
     ## you must supply at least one argument
     if len(sys.argv) < 2:
@@ -172,7 +171,6 @@ if __name__ == '__main__':
 
     input_file = sys.argv[1]
 
-    clauses = generate_clauses(N)
 
     sat_cases = sat2sud(input_file)
 
