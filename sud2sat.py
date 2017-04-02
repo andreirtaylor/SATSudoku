@@ -36,15 +36,17 @@ def parse_into_standard_format(in_file, puzzle_lengh):
 # generates the clauses for one number per entry
 def one_num_per_entry_clause(size):
     ret = []
+    ret.append("c one number per entry")
     for i in range(int(size**2)):
         row = []
-        for val in range(size + 1):
+        for val in range(1, size + 1):
             row.append(str(ind_val_to_base(i, val, size)))
         ret.append(" ".join(row))
     return ret
 
 def once_per_row_clause(size):
     ret = []
+    ret.append("c once per row")
     for col in range(size - 1):
         # the values should be in the range of 1 -> 9
         for val in range(1, size + 1):
@@ -56,6 +58,7 @@ def once_per_row_clause(size):
 
 def once_per_column_clause(size):
     ret = []
+    ret.append("c once per column")
     for row in range(size):
         # the values should be in the range of 1 -> 9
         for val in range(1, size + 1):
@@ -68,6 +71,7 @@ def once_per_column_clause(size):
 
 def sub_grid_clause(size):
     ret = []
+    ret.append("c sub_grid")
     subgrid = int(math.sqrt(size))
 
     for k in range(1, size + 1):
@@ -105,8 +109,10 @@ def sub_grid_clause(size):
 def generate_clauses(size):
     one_number = one_num_per_entry_clause(size)
     rows = once_per_row_clause(size)
-    sub_grid = sub_grid_clause(size)
     cols = once_per_column_clause(size)
+    sub_grid = sub_grid_clause(size)
+
+    return one_number + cols + rows + sub_grid
 
 ## returns a list of sat encoded values for each of the non zero inputs in the file
 def sat2sud(input_file):
@@ -118,7 +124,7 @@ def sat2sud(input_file):
     for line in lines:
         for i in range(len(line)):
             if line[i] != '0':
-                ret.append(ind_val_to_base(i, line[i],9))
+                ret.append(str(ind_val_to_base(i, line[i],9)))
     return ret
 
 if __name__ == '__main__':
@@ -129,4 +135,14 @@ if __name__ == '__main__':
 
     input_file = sys.argv[1]
     sat = sat2sud(input_file)
-    clauses = generate_clauses(9)
+    sat += generate_clauses(9)
+
+    output_file = "sat_out.txt"
+
+    if len(sys.argv) == 3:
+        output_file = sys.argv[2]
+
+    with open(output_file, 'w') as out_file:
+        for line in sat:
+            out_file.write(line + " 0\n")
+
