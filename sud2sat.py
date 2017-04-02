@@ -85,7 +85,6 @@ def once_per_column_clause(size):
 
 def sub_grid_clause(size):
     ret = []
-    #ret.append("c sub_grid1")
     subgrid = int(math.sqrt(size))
 
     for k in range(1, size + 1):
@@ -119,6 +118,23 @@ def sub_grid_clause(size):
                                 ret.append(row)
     return ret
 
+def at_most_one_entry_subgrid_clause(size):
+    ret = []
+    subgrid = int(math.sqrt(size))
+
+    for z in range(1, size + 1):
+        for i in range(subgrid):
+            for j in range(subgrid):
+                for x in range(1, subgrid + 1):
+                    for y in range(1, subgrid + 1):
+                        si = 3*i + x
+                        sj = 3*j + y
+                        sz = z
+                        num = base_convert(si-1, sj-1, z, size)
+                        row = str(num1)
+                        ret.append(row)
+    return ret
+
 # Generates the list of rules for a size x size
 def generate_clauses(size):
     one_number = one_num_per_entry_clause(size)
@@ -126,8 +142,9 @@ def generate_clauses(size):
     cols = once_per_column_clause(size)
     sub_grid = sub_grid_clause(size)
     most_one_entry = at_most_one_entry_clause(size)
+    most_one_entry_subgrid = at_most_one_entry_subgrid_clause(size)
 
-    return one_number + cols + rows + sub_grid + most_one_entry
+    return one_number + cols + rows + sub_grid + most_one_entry + most_one_entry_subgrid
 
 ## returns a list of sat encoded values for each of the non zero inputs in the file
 def sat2sud(input_file):
