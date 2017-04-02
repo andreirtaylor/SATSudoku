@@ -134,9 +134,9 @@ def sat2sud(input_file):
 def print_stats(sat_cases):
     # create a temp file for output
     output_file = "sudoku.cnf"
+    clauses = generate_clauses(N)
 
     for case in sat_cases:
-
         with open(output_file, 'w') as out_file:
             out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses)+ len(case))) + '\n')
             for line in case:
@@ -156,7 +156,6 @@ if __name__ == '__main__':
 
     input_file = sys.argv[1]
 
-    clauses = generate_clauses(N)
 
     sat_cases = sat2sud(input_file)
 
