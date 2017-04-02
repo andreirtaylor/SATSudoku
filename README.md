@@ -55,12 +55,27 @@ Solved in 0.0150430202484 seconds.
 To run the sat solver on 9x9 sudoku puzzles run 
 
 ```
-python main.py <input file>
+python main.py <input file> [-e]
 ```
 
 #### Example 
 ```
 python main.py samples/in_project_euler.txt
+```
+
+### Extended Encoding
+
+Additional constraints can be added using the -e flag 
+
+The current additional constraint are
+    - There is at most one number in each entry
+
+#### Example 
+
+This will solve the problems in file `in_project_euler.txt` with the additional constraints.
+
+```
+python main.py samples/in_project_euler.txt -e
 ```
 
 ## Input Format
