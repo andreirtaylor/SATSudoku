@@ -67,8 +67,8 @@ python main.py samples/in_project_euler.txt
 
 Additional constraints can be added using the -e flag 
 
-The current additional constraint are
-    - There is at most one number in each entry
+The current additional constraints are
+- There is at most one number in each entry
 
 #### Example 
 
