@@ -2,6 +2,8 @@
 
 import sys, re, math
 
+N = 9
+
 usage = """
 python3 sat2sud <input_file> [output_file]
 
@@ -71,7 +73,7 @@ def once_per_column_clause(size):
 
 def sub_grid_clause(size):
     ret = []
-    ret.append("c sub_grid")
+    ret.append("c sub_grid1")
     subgrid = int(math.sqrt(size))
 
     for k in range(1, size + 1):
@@ -80,14 +82,14 @@ def sub_grid_clause(size):
                 for u in range(1, subgrid + 1):
                     for v in range(1, subgrid):
                         for w in range((v + 1), subgrid + 1):
-                            i  = 3*a + u
-                            j1 = 3*b + v
-                            j2 = 3*b + w
+                            i  = subgrid*a + u
+                            j1 = subgrid*b + v
+                            j2 = subgrid*b + w
                             num1 = -base_convert(i-1, j1-1, k, size)
                             num2 = -base_convert(i-1, j2-1, k, size)
                             row = str(num1) + " " + str(num2)
                             ret.append(row)
-
+    ret.append("c sub_grid2")
     for k in range(1, size + 1):
         for a in range(subgrid):
             for b in range(subgrid):
@@ -95,10 +97,10 @@ def sub_grid_clause(size):
                     for v in range(1, subgrid + 1):
                         for w in range((u + 1), subgrid + 1):
                             for t in range(1, subgrid + 1):
-                                i1 = 3*a + u
-                                j1 = 3*b + v
-                                i2 = 3*a + w
-                                j2 = 3*b + t
+                                i1 = subgrid*a + u
+                                j1 = subgrid*b + v
+                                i2 = subgrid*a + w
+                                j2 = subgrid*b + t
                                 num1 = -base_convert(i1-1, j1-1, k, size)
                                 num2 = -base_convert(i2-1, j2-1, k, size)
                                 row = str(num1) + " " + str(num2)
@@ -119,12 +121,12 @@ def sat2sud(input_file):
     lines = []
     with open(input_file, 'r') as in_file:
         ## get 81 character lines in a standard format from the file (assuming 9x9 puzzle for now)
-        lines = parse_into_standard_format(in_file, 81)
+        lines = parse_into_standard_format(in_file, N**2)
     ret = []
     for line in lines:
         for i in range(len(line)):
             if line[i] != '0':
-                ret.append(str(ind_val_to_base(i, line[i],9)))
+                ret.append(str(ind_val_to_base(i, line[i], N)))
     return ret
 
 if __name__ == '__main__':
@@ -134,8 +136,12 @@ if __name__ == '__main__':
         sys.exit(1)
 
     input_file = sys.argv[1]
-    sat = sat2sud(input_file)
-    sat += generate_clauses(9)
+
+    clauses = generate_clauses(N)
+
+    sat = [('p cnf ' + str(N**3) + ' ' + str(len(clauses)) + '\n')]
+    sat += sat2sud(input_file)
+    sat += clauses
 
     output_file = "sat_out.txt"
 
