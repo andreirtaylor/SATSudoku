@@ -8,7 +8,6 @@ It outputs statistics from minisat as well as the solved sudoku puzzle
 WARNING: for repeatability, setting FPU to use double precision
 ============================[ Problem Statistics ]=============================
 |                                                                             |
-WARNING! DIMACS header mismatch: wrong number of clauses.
 |  Number of variables:           729                                         |
 |  Number of clauses:            4007                                         |
 |  Parse time:                   0.00 s                                       |
@@ -41,8 +40,7 @@ SATISFIABLE
 1 6 3 | 7 9 2 | 8 4 5
 5 4 7 | 3 1 8 | 9 2 6
 
-Solved in 0.0153799057007 seconds.
-
+Solved in 0.0150430202484 seconds.
 ```
 
 ## Usage 
