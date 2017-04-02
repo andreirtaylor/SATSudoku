@@ -35,6 +35,18 @@ def parse_into_standard_format(in_file, puzzle_lengh):
     ## now that the whole file is parsed return 81 character strings for each of the puzzles
     return [longLine[i:i+puzzle_lengh] for i in range(0, len(longLine), puzzle_lengh)]
 
+## ensures that there is at most one number in each entry
+def at_most_one_entry_clause(size):
+    ret = []
+    for col in range(size):
+        for row in range(size):
+            # the values should be in the range of 1 -> 9
+            for val1 in range(1, size + 9):
+                for val2 in range(val1 + 1, size + 1):
+                    values = str(-base_convert(row, col, val1, size)) + " " + str(-base_convert(row, col, val2, size))
+                    ret.append(values)
+    return ret
+
 # generates the clauses for one number per entry
 def one_num_per_entry_clause(size):
     ret = []
@@ -113,8 +125,9 @@ def generate_clauses(size):
     rows = once_per_row_clause(size)
     cols = once_per_column_clause(size)
     sub_grid = sub_grid_clause(size)
+    most_one_entry = at_most_one_entry_clause(size)
 
-    return one_number + cols + rows + sub_grid
+    return one_number + cols + rows + sub_grid + most_one_entry
 
 ## returns a list of sat encoded values for each of the non zero inputs in the file
 def sat2sud(input_file):
@@ -141,14 +154,14 @@ def print_stats(sat_cases):
         for idx, case in enumerate(sat_cases):
 
             startTime = time.time()
-            
+
             with open(output_file, 'w') as out_file:
                 out_file.write('p cnf ' + str(N**3) + ' ' + str((len(clauses) + len(case))) + '\n')
                 for line in case:
                     out_file.write(line + " 0\n")
                 for line in clauses:
                     out_file.write(line + " 0\n")
-            
+
             # write to a random temp file
             os.system("minisat " +  output_file + "  " + "tmp")
 
@@ -156,7 +169,7 @@ def print_stats(sat_cases):
             (out, err) = proc.communicate()
 
             print(out)
-            
+
             out = re.sub('[-+|\\n ]', '', out.decode())
 
             t = time.time() - startTime
