@@ -159,7 +159,7 @@ def print_stats(sat_cases):
 
             t = time.time() - startTime
             times.append(t)
-            res.write(str(idx) + "," + str(t) + "," + out + "\n")
+            res.write(str(idx + 1) + "," + str(t) + "," + out + "\n")
 
         res.write(str(reduce(lambda x, y: x + y, times) / len(times)))
 
