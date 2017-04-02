@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 
 import sys
 import string
@@ -12,12 +12,12 @@ def display(puzzle, N):
 
     for idx, line in enumerate(puzzle):
         if (idx in squares):
-            print('---------+---------+--------')
+            print('------+-------+-------\n'),
         for jdx, num in enumerate(line):
             if (jdx in squares):
-                print('|', end='')
-            print(' ' + str(num) + ' ', end='')
-        print(end='\n')
+                print('|'),
+            print(str(num)),
+        print
 
 def sat2sud(input):
     with open(input, 'r') as sat:

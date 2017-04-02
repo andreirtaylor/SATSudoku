@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 
 import sys, re, math, os, time, subprocess
 
@@ -89,7 +89,7 @@ def sub_grid_clause(size):
                             num2 = -base_convert(i-1, j2-1, k, size)
                             row = str(num1) + " " + str(num2)
                             ret.append(row)
-    #ret.append("c sub_grid2")
+    ret.append("c sub_grid2")
     for k in range(1, size + 1):
         for a in range(subgrid):
             for b in range(subgrid):
@@ -154,10 +154,13 @@ def print_stats(sat_cases):
 
             proc = subprocess.Popen("./sat2sud.py tmp", stdout=subprocess.PIPE, shell=True)
             (out, err) = proc.communicate()
+
+            print(out)
             
-            out = re.sub('[-+|\\n ]', '', out)
+            out = re.sub('[-+|\\n ]', '', out.decode())
 
             t = time.time() - startTime
+            print("Solved in " + str(t) + " seconds.\n")
             times.append(t)
             res.write(str(idx + 1) + "," + str(t) + "," + out + "\n")
 
@@ -171,8 +174,6 @@ if __name__ == '__main__':
 
     input_file = sys.argv[1]
 
-
     sat_cases = sat2sud(input_file)
 
     print_stats(sat_cases)
-
